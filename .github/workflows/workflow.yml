@@ -18,7 +18,7 @@ jobs:
         run: echo "GITHUB_ACTIONS has value ${{ env.GITHUB_ACTIONS }}"
 
       - name: Display name of the branch and repository
-        run: echo "Name of the branch ${{ github.ref_name }} and name of repository ${{ github.repository }}"
+        run: echo "Name of the branch ${{ github.ref }} and name of repository ${{ github.repository }}"
 
       - name: Display the event that initiated the workflow
         run: echo "The workflow wat triggered by event ${{ github.event_name }}"
