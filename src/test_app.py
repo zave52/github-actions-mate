@@ -3,9 +3,9 @@ from unittest.mock import patch
 
 import pytest
 
-from app import app, db
-
 os.environ.setdefault("DB_CONNECTION", "sqlite:///:memory:")
+
+from app import app, db
 
 
 @pytest.fixture
