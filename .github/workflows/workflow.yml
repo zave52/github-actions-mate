@@ -41,4 +41,4 @@ jobs:
       - name: Check Complexity
         run: |
           cd ../
-          flake8 . --statistics --max-complexity=10 exit-zero
+          flake8 . --statistics --max-complexity=10 --exit-zero
