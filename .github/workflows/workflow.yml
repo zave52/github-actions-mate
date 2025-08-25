@@ -90,6 +90,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
   helm-ci:
+    name: Helm CI
     runs-on: ubuntu-latest
     needs:
       - python-ci
