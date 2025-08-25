@@ -112,7 +112,7 @@ jobs:
 
       - name: Template Helm
         run: |
-          helm template kube2py ./kube2py/ -f /kube2py/values.yaml
+          helm template kube2py ./kube2py/ -f ./kube2py/values.yaml
 
       - name: Package Helm
         run: |
