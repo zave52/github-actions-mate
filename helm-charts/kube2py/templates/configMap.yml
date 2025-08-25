@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+  namespace: {{ .Values.common.namespace }}
+data:
+{{- range $k, $v := .Values.kube2py.configs }}
+  {{ $k }}: {{ $v | quote }}
+{{- end }}
+  {{- if eq .Values.kube2py.configs.ENVIRONMENT "Production" }}
+  ENV_DETAILS: "Testing Helm"
+  {{- end }}

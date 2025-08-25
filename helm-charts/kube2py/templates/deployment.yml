@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  namespace: {{ .Values.common.namespace }}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Values.kube2py.image.name }}
+          image: {{ .Values.kube2py.image.repository }}:{{ .Values.kube2py.image.version }}
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          resources:
+            requests:
+              memory: {{ .Values.kube2py.resources.requests.memory }}
+              cpu: {{ .Values.kube2py.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.kube2py.resources.limits.memory }}
+              cpu: {{ .Values.kube2py.resources.limits.cpu }}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: EXTERNAL_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-secret
+                  key: external_endpoint
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: APP_ENV
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: data
+          emptyDir: { }
+      tolerations:
+        - key: "app"
+          operator: "Equal"
+          value: "kube2py"
+          effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - busybox
+              topologyKey: "kubernetes.io/hostname"
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - "kube2py"
