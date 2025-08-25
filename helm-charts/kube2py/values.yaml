@@ -6,8 +6,7 @@ global:
 
 mysql:
   configs:
-    MYSQL_USER: "another_user"
-
+    MYSQL_USER: placeholder
 
 kube2py:
   image:
@@ -21,10 +20,10 @@ kube2py:
     APP_ENV: "testing-helm"
 
   secrets:
-    password: "MyStrongPassword"
-    login: "SuperUser"
+    password: placeholder
+    login: placeholder
     external_endpoint: "http://httpbin-api.mateapp.svc.cluster.local"
-    DB_CONNECTION: "mysql+mysqlconnector://app_user:1qazcde3@mysql-0.mysql.mysql.svc.cluster.local/app_db"
+    DB_CONNECTION: placeholder
 
   resources:
     requests:
