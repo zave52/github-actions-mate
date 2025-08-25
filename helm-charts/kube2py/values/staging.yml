@@ -1,0 +1,23 @@
+global:
+  ENVIRONMENT: "Staging"
+
+kube2py:
+  configs:
+    APP_ENV: "testing-helm-staging"
+
+  secrets:
+    password: "MyStrongerPassword"
+    login: "SuperSuperUser"
+
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "100m"
+
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
