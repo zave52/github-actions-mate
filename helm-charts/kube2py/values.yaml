@@ -11,7 +11,7 @@ mysql:
 kube2py:
   image:
     name: kube2py
-    repository: ikulyk404/kube2py
+    repository: zaavee/kube2py
     version: 2.0.0
 
   configs:
