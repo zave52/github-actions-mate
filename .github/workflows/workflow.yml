@@ -45,3 +45,9 @@ jobs:
       - name: Run unit tests with pytest
         run: |
           pytest -v --cov=. --cov-report=term-missing --cov-report=json
+
+      - name: Upload Python artifacts
+        uses: actions/upload-artifacts@v4
+        with:
+          name: python-artifact
+          path: .
