@@ -55,6 +55,13 @@ jobs:
           name: python-artifacts
           path: .
 
+      - name: Upload Helm artifacts
+        if: github.ref_name == 'main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-artifacts
+          path: ${{ github.workspace }}/helm-charts
+
   build-image:
     name: Build and push image
     needs:
