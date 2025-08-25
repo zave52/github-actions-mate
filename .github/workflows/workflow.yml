@@ -14,6 +14,7 @@ env:
 
 jobs:
   python-ci:
+    name: Python CI
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -54,6 +55,7 @@ jobs:
           path: .
 
   build-image:
+    name: Build and push image
     needs:
       - python-ci
     if: github.ref_name == 'main'
