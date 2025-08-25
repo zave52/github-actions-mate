@@ -59,26 +59,3 @@ spec:
       volumes:
         - name: data
           emptyDir: { }
-      tolerations:
-        - key: "app"
-          operator: "Equal"
-          value: "kube2py"
-          effect: "NoSchedule"
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - busybox
-              topologyKey: "kubernetes.io/hostname"
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: "app"
-                    operator: In
-                    values:
-                      - "kube2py"
