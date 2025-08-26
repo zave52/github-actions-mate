@@ -1,13 +1,19 @@
 global:
   ENVIRONMENT: "Staging"
 
+common:
+  namespace: kube2py-staging
+
+mysql:
+  namespace: mysql-staging
+
 kube2py:
   configs:
     APP_ENV: "testing-helm-staging"
 
   secrets:
-    password: "MyStrongerPassword"
-    login: "SuperSuperUser"
+    password: placeholder
+    login: placeholder
 
   resources:
     requests:
