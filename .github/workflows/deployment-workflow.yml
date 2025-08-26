@@ -14,6 +14,9 @@ on:
       helm-values-path:
         type: string
         default: './kube2py/values.yaml'
+      helm-release-name:
+        type: string
+        default: kube2py
 
 jobs:
   deploy-helm:
@@ -53,7 +56,7 @@ jobs:
 
       - name: Deploy Helm to Development
         run: |
-          helm upgrade --install --atomic --wait --timeout 3600s --debug kube2py ./kube2py-*.tgz \
+          helm upgrade --install --atomic --wait --timeout 3600s --debug ${{ inputs.helm-release-name }} ./kube2py-*.tgz \
             -f ${{ inputs.helm-values-path }} \
             --set mysql.configs.MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}" \
             --set mysql.configs.MYSQL_USER="${{ secrets.MYSQL_USER }}" \
