@@ -142,8 +142,7 @@ jobs:
   deploy-helm-staging:
     name: Deploy Helm
     needs:
-      - build-image
-      - helm-ci
+      - deploy-helm-dev
     uses: ./.github/workflows/deployment-workflow.yml
     with:
       environment: deploy-helm-dev
