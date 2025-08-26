@@ -1,67 +1,67 @@
-# name: helm-upgrade
-# run-name: ${{ github.actor }} - ${{ github.ref_name }}
+name: helm-upgrade
+run-name: ${{ github.actor }} - ${{ github.ref_name }}
 
-# on:
-#   workflow_call:
-#     inputs:
-#       environment:
-#         required: true
-#         description: 'Environment to deploy to'
-#         type: string
-#       version:
-#         required: true
-#         type: string
-#       helm-values-path:
-#         type: string
-#         default: './kube2py/values.yaml'
-#       helm-release-name:
-#         type: string
-#         default: kube2py
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        description: 'Environment to deploy to'
+        type: string
+      version:
+        required: true
+        type: string
+      helm-values-path:
+        type: string
+        default: './kube2py/values.yaml'
+      helm-release-name:
+        type: string
+        default: kube2py
 
-# jobs:
-#   deploy-helm:
-#     name: ${{ inputs.environment }}
-#     runs-on: ubuntu-latest
-#     environment: ${{ inputs.environment }}
+jobs:
+  deploy-helm:
+    name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
 
-#     steps:
-#       - name: Download Helm package artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: helm-package
-#           path: .
+    steps:
+      - name: Download Helm package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: helm-package
+          path: .
 
-#       - name: Download Helm artifact
-#         uses: actions/download-artifact@v4
-#         with:
-#           name: helm-artifacts
-#           path: .
+      - name: Download Helm artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: helm-artifacts
+          path: .
 
-#       - name: Set Up Helm
-#         uses: azure/setup-helm@v4.3.0
+      - name: Set Up Helm
+        uses: azure/setup-helm@v4.3.0
 
-#       - name: Set Up kubectl
-#         uses: azure/setup-kubectl@v4
+      - name: Set Up kubectl
+        uses: azure/setup-kubectl@v4
 
-#       - name: Login to Azure CLI
-#         uses: azure/login@v2
-#         with:
-#           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Login to Azure CLI
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-#       - name: Connect to aks cluster
-#         uses: azure/aks-set-context@v3
-#         with:
-#           resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
-#           cluster-name: ${{ vars.AZURE_CLUSTER_NAME }}
+      - name: Connect to aks cluster
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
+          cluster-name: ${{ vars.AZURE_CLUSTER_NAME }}
 
-#       - name: Deploy Helm to Development
-#         run: |
-#           helm upgrade --install --atomic --wait --timeout 3600s --debug ${{ inputs.helm-release-name }} ./kube2py-*.tgz \
-#             -f ${{ inputs.helm-values-path }} \
-#             --set mysql.configs.MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}" \
-#             --set mysql.configs.MYSQL_USER="${{ secrets.MYSQL_USER }}" \
-#             --set mysql.configs.MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \
-#             --set kube2py.secrets.password="${{ secrets.KUBE2PY_PASSWORD }}" \
-#             --set kube2py.secrets.login="${{ secrets.KUBE2PY_LOGIN }}" \
-#             --set kube2py.secrets.DB_CONNECTION="${{ secrets.DB_CONNECTION }}" \
-#             --set kube2py.image.version=${{ github.sha }}
+      - name: Deploy Helm to Development
+        run: |
+          helm upgrade --install --atomic --wait --timeout 3600s --debug ${{ inputs.helm-release-name }} ./kube2py-*.tgz \
+            -f ${{ inputs.helm-values-path }} \
+            --set mysql.configs.MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}" \
+            --set mysql.configs.MYSQL_USER="${{ secrets.MYSQL_USER }}" \
+            --set mysql.configs.MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \
+            --set kube2py.secrets.password="${{ secrets.KUBE2PY_PASSWORD }}" \
+            --set kube2py.secrets.login="${{ secrets.KUBE2PY_LOGIN }}" \
+            --set kube2py.secrets.DB_CONNECTION="${{ secrets.DB_CONNECTION }}" \
+            --set kube2py.image.version=${{ github.sha }}
