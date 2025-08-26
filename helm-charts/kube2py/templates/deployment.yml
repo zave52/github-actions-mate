@@ -44,6 +44,11 @@ spec:
                 configMapKeyRef:
                   name: {{ .Chart.Name }}-config
                   key: APP_ENV
+            - name: DB_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-secret
+                  key: DB_CONNECTION
           livenessProbe:
             httpGet:
               path: /health
