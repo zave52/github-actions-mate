@@ -9,6 +9,9 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 env:
   PYTHON_VERSION: 3.13
   DOCKER_IMAGE_NAME: kube2py
