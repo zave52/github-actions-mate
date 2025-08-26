@@ -8,6 +8,20 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment Deploy to'
+        required: true
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      message:
+        description: 'Test Message'
+        required: false
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
