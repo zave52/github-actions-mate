@@ -150,4 +150,3 @@ jobs:
       helm-values-path: ./kube2py/values/staging.yml
       helm-release-name: kube2py-staging
     secrets: inherit
-
