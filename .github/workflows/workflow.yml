@@ -17,7 +17,7 @@ jobs:
   python-ci:
     strategy:
       matrix:
-        PythonVersion: [ 3.13, 3.12, 3.11, 3.10]
+        PythonVersion: [ 3.13, 3.12, 3.11 ]
         OsType: [ ubuntu-latest, windows-latest ]
 
     name: Python CI
