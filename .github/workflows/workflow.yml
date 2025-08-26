@@ -145,7 +145,7 @@ jobs:
       - deploy-helm-dev
     uses: ./.github/workflows/deployment-workflow.yml
     with:
-      environment: deploy-helm-dev
+      environment: staging
       version: ${{ github.sha }}
       helm-values-path: ./kube2py/values/staging.yaml
       helm-release-name: kube2py-staging
