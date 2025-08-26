@@ -128,52 +128,13 @@ jobs:
           name: helm-package
           path: ./*.tgz
 
-  deploy-helm:
+  deploy-helm-dev:
     name: Deploy Helm
     needs:
       - build-image
       - helm-ci
-    runs-on: ubuntu-latest
-    environment: development
-
-    steps:
-      - name: Download Helm package artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: helm-package
-          path: .
-
-      - name: Download Helm artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: helm-artifacts
-          path: .
-
-      - name: Set Up Helm
-        uses: azure/setup-helm@v4.3.0
-
-      - name: Set Up kubectl
-        uses: azure/setup-kubectl@v4
-
-      - name: Login to Azure CLI
-        uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Connect to aks cluster
-        uses: azure/aks-set-context@v3
-        with:
-          resource-group: ${{ vars.AZURE_RESOURCE_GROUP }}
-          cluster-name: ${{ vars.AZURE_CLUSTER_NAME }}
-
-      - name: Deploy Helm to Development
-        run: |
-          helm upgrade --install --atomic --wait --timeout 3600s --debug kube2py ./kube2py-*.tgz \
-            -f ./kube2py/values.yaml \
-            --set mysql.configs.MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}" \
-            --set mysql.configs.MYSQL_USER="${{ secrets.MYSQL_USER }}" \
-            --set mysql.configs.MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \
-            --set kube2py.secrets.password="${{ secrets.KUBE2PY_PASSWORD }}" \
-            --set kube2py.secrets.login="${{ secrets.KUBE2PY_LOGIN }}" \
-            --set kube2py.secrets.DB_CONNECTION="${{ secrets.DB_CONNECTION }}" \
-            --set kube2py.image.version=${{ github.sha }}
+    uses: ./.github/workflows/deployment-workflow.yml
+    with:
+      environment: development
+      version: ${{ github.sha }}
+    secrets: inherit
