@@ -15,8 +15,13 @@ env:
 
 jobs:
   python-ci:
+    strategy:
+      matrix:
+        PythonVersion: [ 3.13, 3.12, 3.11, 3.10]
+        OsType: [ ubuntu-latest, windows-latest ]
+
     name: Python CI
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.OsType }}
     defaults:
       run:
         working-directory: ./src
@@ -24,10 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python ${{ env.PYTHON_VERSION }}
+      - name: Setup Python ${{ matrix.PythonVersion }}
         uses: actions/setup-python@v5
         with:
-          python-version: "${{ env.PYTHON_VERSION }}"
+          python-version: "${{ matrix.PythonVersion }}"
 
       - name: Install dependencies
         run: |
